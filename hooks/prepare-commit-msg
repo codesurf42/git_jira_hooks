@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# An example hook script to prepare the commit log message.
+# Called by "git commit" with the name of the file that has the
+# commit message, followed by the description of the commit
+# message's source.  The hook's purpose is to edit the commit
+# message file.  If the hook fails with a non-zero status,
+# the commit is aborted.
+#
+# To enable this hook, rename this file to "prepare-commit-msg"
+
+# This hook takes a supposed Jira ticket number from branch name
+# if it follow patterns like:
+# user1/core-67812
+# gh/bau-6788-someone-told-me-to-do-it
+# typx/nde-7901_foo_bar
+#
+# with assumption the ticket code-number is after first slash
+
+case "$2,$3" in
+  ,|template,)
+    /usr/bin/perl -i.bak -wpe '
+      $br = `git rev-parse --abbrev-ref HEAD`;
+      chomp($br);
+      if ($br =~ s@
+          ^
+          (\w{1,5}/)?     # skip optional user prefix
+          (\w{2,4}\-\d+)  # ticket code-number
+          .*$
+          @$2: @x)
+      {
+        s/^/$br/ if ($. == 1)
+      }
+      ' "$1" ;;
+
+
+  *) ;;
+esac
+

@@ -2,6 +2,13 @@
 
 * prepare-commit-msg: Takes jira ticker number from branch name and puts that into your prepared commit message
 
+Works with branch names like:
+
+```
+abc/proj-123
+def/proj-123_new_feature1
+```
+
 ## How to use it?
 
 * Clone this repo as your .git_template
@@ -13,7 +20,7 @@ git clone https://github.com/codesurf42/git_jira_hooks.git ~/.git_template
 
 ```
 [init]
-        templatedir = ~/.git_template
+  templatedir = ~/.git_template
 ```
 
 * Reinitialise your current git repository with:

@@ -8,6 +8,7 @@ Works with branch names like:
 abc/proj-123
 def/proj-123_new_feature1
 ```
+and is [easy to extend](hooks/prepare-commit-msg)
 
 ## How to use it?
 

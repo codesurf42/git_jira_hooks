@@ -1,0 +1,53 @@
+#!/usr/bin/env perl
+# An example hook script to prepare the commit log message.
+# Called by "git commit" with the name of the file that has the
+# commit message, followed by the description of the commit
+# message's source.  The hook's purpose is to edit the commit
+# message file.  If the hook fails with a non-zero status,
+# the commit is aborted.
+#
+# To enable this hook, rename this file to "prepare-commit-msg"
+
+# This hook takes a supposed Jira ticket number from branch name
+# if it follow patterns like:
+
+
+@test_data = qw(
+user1/core-67812
+user1/core-679812
+gh/bau-6788-someone-told-me-to-do-it
+typx/nde-7901_foo_bar
+FILE-500-proxy
+NONPR-379_nrs_auth1
+);
+
+#
+# with assumption the ticket code-number is after first slash
+
+foreach my $line (@test_data) {
+  print "test: $line\n";
+  change($line);
+}
+
+sub change() {
+  ($_) = @_;
+
+  $br = $_; 
+      chomp($br);
+      if ($br =~ s@
+          ^
+          (\w{1,5}/)?     # skip optional user prefix
+          (\w{2,5}\-\d+)  # ticket code-number
+          .*$
+          @$2: @x)
+      {
+        print "OK!\n";
+        print "$br\n";
+        print scalar($.) . " counts\n";
+        s/^/$br/ if ($. == 1)
+      }
+      print "MSG: $_";
+      print " == DIFF" if ($_ ne $_[0]);
+      print "\n";
+    }
+

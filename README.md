@@ -35,3 +35,8 @@ git init
 ```git commit``` or ```git commit -a```
 
 * Thank you for using. Please contribute your automation ideas!
+
+* TODO
+
+- Tests should test the regexp code directly from exec file
+
